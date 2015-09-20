@@ -15,6 +15,10 @@ var bus_jhs_options = {
 	"404": "app.html", //错误页也自动导向主页，而后用JS进行动态加载404页面
 	template_map: Object.create(null),
 	md5_map: Object.create(null),
+	template_path_replace: {
+		from: "/usr/local/gitDepot",
+		to: "http://dotnar.com:8081"
+	},
 	get_file_path: function(req, res, pathname) {
 		// 文件请求的优先级
 		//一种继承的形式
@@ -42,7 +46,7 @@ var bus_jhs_options = {
 		if (render_data.busInfo._id === "jewel") {
 			res.template_root = _is_mobile ? "/usr/local/gitDepot/jewel/" : base_config.default_pc_template_root;
 		} else if (render_data.busInfo.permission.data_pc_template_name || render_data.busInfo.permission.data_mobile_template_name) {
-			res.template_root = common.getTemplatePaths(_is_mobile ? render_data.busInfo.permission.data_mobile_template_name : render_data.busInfo.permission.data_pc_template_name)
+			res.template_root = common.getTemplatePaths(_is_mobile ? render_data.busInfo.permission.data_mobile_template_name : render_data.busInfo.permission.data_pc_template_name, bus_jhs_options)
 			if (!(Array.isArray(res.template_root) && res.template_root.length > 0)) {
 				res.template_root = null;
 			}

@@ -40,7 +40,7 @@ function _get_render_data_cache(options) {
 	return Fiber.yield();
 };
 
-function _get_template_info_cache(template_name) {
+function _get_template_info_cache(template_name, options) {
 	var key = "template_paths_data:" + template_name;
 	if (!jhs.cache.hasClockCache(key)) {
 		jhs.cache.defineClockCache(key, "time", {
@@ -59,9 +59,15 @@ function _get_template_info_cache(template_name) {
 	return Fiber.yield();
 };
 
-function _get_template_paths_cache(template_name) {
-	var template_info = _get_template_info_cache(template_name);
-	return template_info && template_info.relationPaths
+function _get_template_paths_cache(template_name, options) {
+	var template_info = _get_template_info_cache(template_name, options);
+	var relationPaths = template_info && template_info.relationPaths
+	if (relationPaths && options.template_path_replace) {
+		relationPaths = relationPaths.map(function(path) {
+			return path.replace(options.template_path_replace.from, options.template_path_replace.to)
+		});
+	}
+	return relationPaths;
 };
 
 module.exports = {

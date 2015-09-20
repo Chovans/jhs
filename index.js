@@ -147,19 +147,19 @@ function _route_to_file(file_paths, res_pathname, type, pathname, params, req, r
 	}
 
 	var file_path = file_paths.map(function(filepath) {
-		return path.normalize(filepath + "/" + res_pathname);
+		return filepath + "/" + res_pathname;
 	});
 
 	var content_type = mime.contentType(type);
 	res.set('Content-Type', content_type);
-	var fileInfo = cache.getFileCache(_file_path);
+	var fileInfo = cache.getFileCache(file_path);
 	res.body = fileInfo.source_content;
 
 
 	if (fileInfo.is_text) {
 		var _extname = path.extname(res_pathname);
 		var _filename = path.basename(res_pathname);
-		var _basename = path.basename(res_pathname, extname);
+		var _basename = path.basename(res_pathname, _extname);
 		res.is_text = true;
 		res.text_file_info = {
 			filename: _extname,
